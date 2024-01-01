@@ -1,12 +1,11 @@
-// import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-// import { Document } from 'mongoose';
-// import { Product, ProductSchema } from '../../products/entities/product.entity';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
 
-// @Schema()
-// export class Cart extends Document {
-//   @Prop({ type: [{ type: ProductSchema }] }) 
-//   products: Product[];
-// }
+@Schema()
+export class Cart {
+  @Prop({ type: Types.ObjectId, ref: 'Product' })
+  product: string;
+}
 
-// export type CartDocument = Cart & Document;
-// export const CartSchema = SchemaFactory.createForClass(Cart);
+export type CartDocument = Cart & Document;
+export const CartSchema = SchemaFactory.createForClass(Cart);

@@ -21,8 +21,6 @@ import { UpdateProductDto } from './dto/update-product.dto';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  
-  
   @Post()
   @HttpCode(201)
   @UsePipes(ValidationPipe)
@@ -60,42 +58,42 @@ export class ProductController {
   //   });
   // }
 
-//   @Put(':productID')
-//   @HttpCode(200)
-//   @UsePipes(ValidationPipe)
-//   async updateProduct(
-//     @Res() res,
-//     @Param('productID') productID,
-//     @Body() updateProductDto: UpdateProductDto,
-//   ): Promise<any> {
-//     const updatedProduct = await this.productService.update(
-//       productID,
-//       updateProductDto,
-//     );
-//     if (!updatedProduct) {
-//       throw new NotFoundException('Product does not exist!');
-//     }
-//     return res.json({
-//       message: 'Product has been successfully updated',
-//       product: updatedProduct,
-//     });
-//   }
+  //   @Put(':productID')
+  //   @HttpCode(200)
+  //   @UsePipes(ValidationPipe)
+  //   async updateProduct(
+  //     @Res() res,
+  //     @Param('productID') productID,
+  //     @Body() updateProductDto: UpdateProductDto,
+  //   ): Promise<any> {
+  //     const updatedProduct = await this.productService.update(
+  //       productID,
+  //       updateProductDto,
+  //     );
+  //     if (!updatedProduct) {
+  //       throw new NotFoundException('Product does not exist!');
+  //     }
+  //     return res.json({
+  //       message: 'Product has been successfully updated',
+  //       product: updatedProduct,
+  //     });
+  //   }
 
-//   @Delete(':ProductId')
-//   @HttpCode(200)
-//   async delete(
-//     @Res() res,
-//     @Param('ProductId') ProductId: string,
-//   ): Promise<any> {
-//     const product = await this.productService.findOne(ProductId);
+  //   @Delete(':ProductId')
+  //   @HttpCode(200)
+  //   async delete(
+  //     @Res() res,
+  //     @Param('ProductId') ProductId: string,
+  //   ): Promise<any> {
+  //     const product = await this.productService.findOne(ProductId);
 
-//     if (!product) {
-//       throw new NotFoundException('product does not exist!');
-//     }
-//     await this.productService.softDelete(ProductId);
-//     return res.json({
-//       message: 'Product has been trashed successfully',
-//       product: product,
-//     });
-//   }
+  //     if (!product) {
+  //       throw new NotFoundException('product does not exist!');
+  //     }
+  //     await this.productService.softDelete(ProductId);
+  //     return res.json({
+  //       message: 'Product has been trashed successfully',
+  //       product: product,
+  //     });
+  //   }
 }
