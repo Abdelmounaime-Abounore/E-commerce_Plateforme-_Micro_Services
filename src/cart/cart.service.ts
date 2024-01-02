@@ -18,7 +18,7 @@ export class CartService {
       
   
       const product = await this.productModel.findById(productId);
-      cart.products.push(productId);
+      cart.products.push(product);
       await cart.save();
   
       return cart.toJSON();
