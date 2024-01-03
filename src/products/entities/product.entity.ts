@@ -1,7 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ObjectId, SchemaTypes, Types } from 'mongoose';
 
 @Schema()
 export class Product {
+   @Prop({ type: SchemaTypes.ObjectId }) 
+  _id: string;
+
   @Prop()
   name: string;
 

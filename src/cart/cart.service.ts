@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Cart, CartDocument } from './entities/cart.entity';
 import { Product, ProductDocument } from 'src/products/entities/product.entity';
-import internal from 'stream';
 
 @Injectable()
 export class CartService {
@@ -15,15 +14,45 @@ export class CartService {
   async addProductToCart(cartId: string, productId: string): Promise<Cart> {
     try {
       const cart = await this.cartModel.findById(cartId);
-      
+      const product = await this.productModel.findOne({ _id: productId });
   
-      const product = await this.productModel.findById(productId);
-      cart.products.push(product);
+      if (!cart) {
+        throw new NotFoundException('Cart not found');
+      }
+      if (!product) {
+        throw new NotFoundException('Product not found');
+      }
+      cart.products.push(product); 
       await cart.save();
   
       return cart.toJSON();
     } catch (error) {
       console.error(error);
+      throw new InternalServerErrorException('Something went wrong');
+    }
+  }
+
+  async deleteProductFromCart(cartId: string, productId: string): Promise<Cart> {
+    try {
+      const cart = await this.cartModel.findById(cartId);
+      if (!cart) {
+        throw new NotFoundException('Cart not found');
+      }
+      
+      const productIndex = cart.products.findIndex(product => product._id == productId);
+      if (productIndex === -1) {
+        throw new NotFoundException('Product not found in the cart');
+      }
+  
+      cart.products.splice(productIndex, 1);
+      await cart.save();
+  
+      return cart.toJSON();
+    } catch (error) {
+      console.error(error);
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
       throw new InternalServerErrorException('Something went wrong');
     }
   }
