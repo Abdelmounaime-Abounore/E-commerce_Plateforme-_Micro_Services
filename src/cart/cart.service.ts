@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Cart, CartDocument } from './entities/cart.entity';
@@ -11,7 +11,7 @@ export class CartService {
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
   ) {}
 
-  async addProductToCart(cartId: string, productId: string): Promise<Cart> {
+  async addProductToCart(cartId: string, productId: string, quantity: number): Promise<Cart> {
     try {
       const cart = await this.cartModel.findById(cartId);
       const product = await this.productModel.findOne({ _id: productId });
@@ -22,6 +22,14 @@ export class CartService {
       if (!product) {
         throw new NotFoundException('Product not found');
       }
+
+      if(product.quantity < quantity) {
+        throw new BadRequestException('Invalid quantity');
+      }
+
+      product.quantity -= quantity;
+      await product.save()
+      product.quantity = quantity
       cart.products.push(product); 
       await cart.save();
   
@@ -43,7 +51,9 @@ export class CartService {
       if (productIndex === -1) {
         throw new NotFoundException('Product not found in the cart');
       }
-  
+      const product = await this.productModel.findOne({ _id: productId });
+      product.quantity += cart.products[productIndex].quantity;
+      await product.save()
       cart.products.splice(productIndex, 1);
       await cart.save();
   
