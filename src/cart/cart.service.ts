@@ -56,4 +56,29 @@ export class CartService {
       throw new InternalServerErrorException('Something went wrong');
     }
   }
+
+  async updateProductQuantity(cartId: string, productId: string, newQuantity: number): Promise<Cart> {
+    try {
+      const cart = await this.cartModel.findById(cartId);
+      if (!cart) {
+        throw new NotFoundException('Cart not found');
+      }
+      
+      const productIndex = cart.products.findIndex(product => product._id == productId);
+      if (productIndex === -1) {
+        throw new NotFoundException('Product not found in the cart');
+      }
+  
+      cart.products[productIndex].quantity = newQuantity;
+      await cart.save();
+  
+      return cart.toJSON();
+    } catch (error) {
+      console.error(error);
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Something went wrong');
+    }
+  }
 }

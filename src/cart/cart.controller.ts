@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Param, Delete, Patch } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { ObjectId } from 'mongoose';
 
@@ -17,4 +17,12 @@ export class CartController {
     const cart = await this.cartService.deleteProductFromCart(cartDto.cartId, cartDto.productId);
     return { message: 'Product deleted from cart successfully', cart };
   }
+  
+  @Patch()
+  async updateProductQuantity(@Body() updateDto: { cartId: string; productId: string; quantity: number }) {
+    const { cartId, productId, quantity } = updateDto;
+    const cart = await this.cartService.updateProductQuantity(cartId, productId, quantity);
+    return { message: 'Product quantity updated in cart successfully', cart };
+  }
+
 }
