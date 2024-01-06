@@ -27,8 +27,6 @@ export class CartService {
         throw new BadRequestException('Invalid quantity');
       }
 
-      product.quantity -= quantity;
-      await product.save()
       product.quantity = quantity
       cart.products.push(product); 
       await cart.save();
@@ -51,7 +49,7 @@ export class CartService {
       if (productIndex === -1) {
         throw new NotFoundException('Product not found in the cart');
       }
-      const product = await this.productModel.findOne({ _id: productId });
+      const product = await this.productModel.findById({ _id: productId });
       product.quantity += cart.products[productIndex].quantity;
       await product.save()
       cart.products.splice(productIndex, 1);
@@ -79,8 +77,12 @@ export class CartService {
         throw new NotFoundException('Product not found in the cart');
       }
   
-      cart.products[productIndex].quantity = newQuantity;
-      await cart.save();
+      const product = await this.productModel.findOne({ _id: productId });
+      if(product.quantity < newQuantity) {
+        throw new BadRequestException('Invalid quantity');
+      }
+        cart.products[productIndex].quantity = newQuantity;
+        await cart.save();
   
       return cart.toJSON();
     } catch (error) {
