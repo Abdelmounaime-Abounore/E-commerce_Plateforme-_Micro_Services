@@ -1,10 +1,11 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ObjectId, SchemaTypes, Types } from 'mongoose';
+import { Prop, Schema, SchemaFactory  } from '@nestjs/mongoose';
+import mongoose, { ObjectId, SchemaTypes, Types  } from 'mongoose';
 
 @Schema()
 export class Product {
-   @Prop({ type: SchemaTypes.ObjectId }) 
-  _id: string;
+
+  // @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Product' })
+  // product: mongoose.Types.ObjectId;
 
   @Prop()
   name: string;

@@ -22,8 +22,8 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  @HttpCode(201)
-  @UsePipes(ValidationPipe)
+  // @HttpCode(201)
+  // @UsePipes(ValidationPipe)
   async create(@Res() res, @Body() createProductDto: CreateProductDto) {
     const newProduct = await this.productService.create(createProductDto);
     return res.json({
